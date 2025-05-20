@@ -42,8 +42,9 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public User getUserById(@PathVariable String id) {
-    return null;
+  public ResponseEntity<User> getUserById(@PathVariable String id) {
+    User user = userUseCase.getUserById(id);
+    return ResponseEntity.ok(user);
   }
 
   @PostMapping
@@ -65,12 +66,24 @@ public class UserController {
   }
 
   @PutMapping("/{id}")
-  public User updateUser(@PathVariable String id, @RequestBody User user) {
-    return null;
+  public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody User user, BindingResult result) {
+    if (result.hasErrors()) {
+      List<String> errors = result.getFieldErrors().stream()
+          .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
+          .toList();
+      return ResponseEntity
+          .badRequest()
+          .body(Map.of("errors", errors));
+    }
+
+    User updated = userUseCase.updateUser(id, user);
+    return ResponseEntity
+        .ok(updated);
   }
 
   @DeleteMapping("/{id}")
-  public void deleteUser(@PathVariable String id) {
-
+  public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+    userUseCase.deleteUser(id);
+    return ResponseEntity.noContent().build();
   }
 }

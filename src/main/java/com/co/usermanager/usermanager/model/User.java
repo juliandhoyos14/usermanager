@@ -1,5 +1,8 @@
 package com.co.usermanager.usermanager.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -7,11 +10,16 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Entity
+@Table(name="users")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
+  @Id
   @NotNull(message = "Id is required")
   private String id;
 

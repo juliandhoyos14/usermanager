@@ -16,7 +16,7 @@ public class UserUseCase {
     return userRepository.getUsers(minAge, maxAge);
   }
 
-  public User getUsersById(String id) {
+  public User getUserById(String id) {
     return userRepository.getUserById(id);
   }
 
