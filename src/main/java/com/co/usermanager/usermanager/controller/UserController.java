@@ -8,7 +8,6 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,17 +47,7 @@ public class UserController {
   }
 
   @PostMapping
-  public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult result) {
-    if (result.hasErrors()) {
-      List<String> errors = result.getFieldErrors().stream()
-          .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
-          .toList();
-
-      return ResponseEntity
-          .badRequest()
-          .body(Map.of("errors", errors));
-    }
-
+  public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
     User created = userUseCase.createUser(user);
     return ResponseEntity
         .status(HttpStatus.CREATED)
@@ -66,16 +55,7 @@ public class UserController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody User user, BindingResult result) {
-    if (result.hasErrors()) {
-      List<String> errors = result.getFieldErrors().stream()
-          .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
-          .toList();
-      return ResponseEntity
-          .badRequest()
-          .body(Map.of("errors", errors));
-    }
-
+  public ResponseEntity<User> updateUser(@PathVariable String id, @Valid @RequestBody User user) {
     User updated = userUseCase.updateUser(id, user);
     return ResponseEntity
         .ok(updated);
